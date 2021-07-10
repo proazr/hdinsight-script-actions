@@ -515,10 +515,15 @@ if [[ "$(hostname -s)" == hn0* ]]; then
 	# grantZeppelinViewAccess "clusteradministrator"
 fi
 
-# Delete the local file and the one on Azure storage
-log "Removing user-list csv locally and from azure storage"
+# Delete the local file
+log "Removing user-list csv locally"
 [ -e "/tmp/${USER_LIST_FILENAME}" ] && rm "/tmp/${USER_LIST_FILENAME}"
-hdfs dfs -rm "wasbs://scripts@${SCRIPT_STORAGE_ACCOUNT}/${USER_LIST_FILENAME}"
+
+# Delete the blob on one of the head nodes
+if [[ "$(hostname -s)" == hn0* ]]; then	
+	log "Removing user-list csv from azure storage"
+	hdfs dfs -rm "wasbs://scripts@${SCRIPT_STORAGE_ACCOUNT}/${USER_LIST_FILENAME}"
+fi
 
 # copy the log file to the linked storage
 log "Copying log file from ${LOG_FILE} to (wasbs://logs@${SCRIPT_STORAGE_ACCOUNT})"
