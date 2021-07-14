@@ -49,7 +49,8 @@ createSudoersFile() {
 		then
 			log "Sudoers file already exists, skipping step."
 		else
-			log "${SUDO_GROUP} ALL = (ALL) ALL" > "/tmp/$SudoersFile"
+			log "Writing to sudoers tmp file - %${SUDO_GROUP} ALL = (ALL) ALL" 
+			echo "%${SUDO_GROUP} ALL = (ALL) ALL" > "/tmp/$SudoersFile"
 
 			chown root:root "/tmp/$SudoersFile"
 			chmod 0440 "/tmp/$SudoersFile"
